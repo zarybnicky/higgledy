@@ -27,11 +27,13 @@ module Data.Generic.HKD.Named
   ) where
 
 import Data.Functor.Contravariant (Contravariant (..))
+import Data.Generics.Product.Internal.GLens
 import Data.Generic.HKD.Types (HKD, HKD_)
-import Data.GenericLens.Internal (GUpcast (..))
 import Data.Kind (Type)
 import GHC.Generics
 import Named ((:!), NamedF (..))
+import GHC.TypeLits (Symbol)
+import Data.GenericLens.Internal (view, HasTotalFieldP)
 
 type family Append (xs :: Type -> Type) (ys :: Type -> Type) :: Type -> Type where
   Append (S1 meta head) tail    = S1 meta head :*: tail
@@ -98,6 +100,28 @@ instance
     )
     => GRecord (left :*: right) f structure k where
   grecord fill = \(Arg left) -> grecord \right -> fill (M1 (K1 left) :*: right)
+
+class GUpcast (sub :: Type -> Type) (sup :: Type -> Type) where
+  gupcast :: sub p -> sup p
+
+instance (GUpcast sub a, GUpcast sub b) => GUpcast sub (a :*: b) where
+  gupcast rep = gupcast rep :*: gupcast rep
+
+instance
+  GLens' (HasTotalFieldPSym field) sub t
+  => GUpcast sub (S1 ('MetaSel ('Just field) p f b) (Rec0 t)) where
+
+  gupcast r = M1 (K1 (view (glens @(HasTotalFieldPSym field)) r))
+
+instance GUpcast sub sup => GUpcast sub (C1 c sup) where
+  gupcast = M1 . gupcast
+
+instance GUpcast sub sup => GUpcast sub (D1 c sup) where
+  gupcast = M1 . gupcast
+
+data HasTotalFieldPSym :: Symbol -> (TyFun (Type -> Type) (Maybe Type))
+type instance Eval (HasTotalFieldPSym sym) tt = HasTotalFieldP sym tt
+
 
 instance
     ( Contravariant (HKD_ f structure)

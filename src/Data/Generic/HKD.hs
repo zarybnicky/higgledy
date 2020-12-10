@@ -17,7 +17,7 @@ module Data.Generic.HKD
 
   , Barbie.ConstraintsB (..)
   , Barbie.FunctorB (..)
-  , Barbie.ProductBC (..)
+  , Barbie.ApplicativeB (..)
   , Barbie.TraversableB (..)
 
   , position
@@ -30,7 +30,7 @@ import Data.Generic.HKD.Labels       as Exports
 import Data.Generic.HKD.Named        as Exports
 import Data.Generic.HKD.Types        as Exports
 
-import qualified Data.Barbie as Barbie
+import qualified Barbies as Barbie
 
 import qualified Data.Generics.Internal.VL.Lens as G
 import qualified Data.Generics.Product as G
