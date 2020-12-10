@@ -56,7 +56,6 @@ module Main where
 
 import Control.Applicative (Alternative (empty))
 import Control.Lens ((.~), (^.), (&), Const (..), Identity, anyOf)
-import Data.Barbie (ProductB (buniq))
 import Data.Generic.HKD
 import Data.Maybe (isJust, isNothing)
 import Data.Monoid (Last (..))
@@ -205,12 +204,12 @@ eg9 = eg8 ! #name (Just "Tom")
 ```
 
 If you're _still_ not satisfied, check out the
-[`buniq`](https://hackage.haskell.org/package/barbies-1.1.2.1/docs/Data-Barbie.html#v:buniq)
+[`bpure`](https://hackage.haskell.org/package/barbies-2.0.2.0/docs/Data-Functor-Barbie.html#v:bpure)
 method hiding in `barbies`:
 
 ```haskell
 eg10 :: HKD Triple []
-eg10 = buniq empty
+eg10 = bpure empty
 -- Triple [] [] []
 ```
 

@@ -10,8 +10,8 @@
 {-# LANGUAGE TypeApplications          #-}
 module Main where
 
+import Barbies.Constraints (Dict)
 import Control.Lens (Lens', (.~), (^.))
-import Data.Barbie.Constraints (Dict)
 import Data.Function ((&), on)
 import Data.Functor.Identity (Identity (..))
 import Data.Functor.Product (Product (..))
